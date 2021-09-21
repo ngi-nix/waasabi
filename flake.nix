@@ -7,7 +7,10 @@
   inputs.strapi-src.url = "github:strapi/strapi/v3.6.8";
   inputs.strapi-src.flake = false;
 
-  outputs = { self, nixpkgs, flake-utils, strapi-src }:
+  inputs.template-src.url = "github:baytechc/strapi-template-waasabi";
+  inputs.template-src.flake = false;
+
+  outputs = { self, nixpkgs, flake-utils, strapi-src, template-src }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -15,7 +18,7 @@
         in
         {
           packages = {
-            inherit (pkgs) create-strapi-app;
+            inherit (pkgs) create-strapi-app waasabi-backend;
           };
         })
   // {
@@ -25,6 +28,7 @@
     in
     {
       inherit (strapiWorkspace) create-strapi-app;
+      waasabi-backend = final.callPackage ./packages/waasabi-backend { inherit template-src; };
     };
   };
 }

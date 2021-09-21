@@ -34,7 +34,8 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "strapi-src": "strapi-src"
+        "strapi-src": "strapi-src",
+        "template-src": "template-src"
       }
     },
     "strapi-src": {
@@ -51,6 +52,22 @@
         "owner": "strapi",
         "ref": "v3.6.8",
         "repo": "strapi",
+        "type": "github"
+      }
+    },
+    "template-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1625038952,
+        "narHash": "sha256-6tnD//N7NuWfUlJHD7hzMLSeIIduipOzoLWI9H5pdSg=",
+        "owner": "baytechc",
+        "repo": "strapi-template-waasabi",
+        "rev": "a73c885cf7cd81aae4a4fcb45798c1239877fccf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "baytechc",
+        "repo": "strapi-template-waasabi",
         "type": "github"
       }
     }

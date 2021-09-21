@@ -1,0 +1,91 @@
+diff --git a/packages/strapi-generate-new/lib/utils/merge-template.js b/packages/strapi-generate-new/lib/utils/merge-template.js
+index 455dea456..3c9290748 100644
+--- a/packages/strapi-generate-new/lib/utils/merge-template.js
++++ b/packages/strapi-generate-new/lib/utils/merge-template.js
+@@ -5,6 +5,7 @@ const path = require('path');
+ const fse = require('fs-extra');
+ const _ = require('lodash');
+ const chalk = require('chalk');
++const chmodr = require('chmodr');
+ 
+ const { getRepoInfo, downloadGitHubRepo } = require('./fetch-github');
+ 
+@@ -30,21 +31,40 @@ const allowedTemplateContents = {
+  * @param {string} rootPath  project path
+  */
+ module.exports = async function mergeTemplate(scope, rootPath) {
+-  // Parse template info
+-  const repoInfo = await getRepoInfo(scope.template);
+-  const { fullName } = repoInfo;
+-  console.log(`Installing ${chalk.yellow(fullName)} template.`);
+-
+-  // Download template repository to a temporary directory
+   const templatePath = await fse.mkdtemp(path.join(os.tmpdir(), 'strapi-'));
+-  await downloadGitHubRepo(repoInfo, templatePath);
++  let fullName = "";
++  let fullTemplateUrl = "";
++
++  if (scope.template.startsWith("file://")) {
++    const path = scope.template.replace("file://", "");
++    await fse.copy(path, templatePath);
++    chmodr(templatePath, 0o777, (err) => {
++      if (err) {
++        console.log('Failed to execute chmod', err);
++      } else {
++        console.log('Success');
++      }
++    });
++
++    fullName = "local-template";
++    fullTemplateUrl = scope.template;
++  } else {
++    // Parse template info
++    const repoInfo = await getRepoInfo(scope.template);
++    fullName = repoInfo.fullName;
++    console.log(`Installing ${chalk.yellow(fullName)} template.`);
++
++    // Download template repository to a temporary directory
++    await downloadGitHubRepo(repoInfo, templatePath);
++      
++    fullTemplateUrl = `https://github.com/${fullName}`;
++  }
+ 
+   // Make sure the downloaded template matches the required format
+   const { templateConfig } = await checkTemplateRootStructure(templatePath, scope);
+   await checkTemplateContentsStructure(path.resolve(templatePath, 'template'));
+ 
+   // Merge contents of the template in the project
+-  const fullTemplateUrl = `https://github.com/${fullName}`;
+   await mergePackageJSON(rootPath, templateConfig, fullTemplateUrl);
+   await mergeFilesAndDirectories(rootPath, templatePath);
+ 
+diff --git a/packages/strapi-generate-new/package.json b/packages/strapi-generate-new/package.json
+index 2bcc958bf..16ac17b68 100644
+--- a/packages/strapi-generate-new/package.json
++++ b/packages/strapi-generate-new/package.json
+@@ -24,7 +24,8 @@
+     "node-machine-id": "^1.1.10",
+     "ora": "^5.4.0",
+     "tar": "6.1.4",
+-    "uuid": "^3.3.2"
++    "uuid": "^3.3.2",
++    "chmodr": "1.2.0"
+   },
+   "scripts": {
+     "test": "echo \"no tests yet\""
+diff --git a/yarn.lock b/yarn.lock
+index 8e24e24e6..b91ccc444 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -5843,6 +5843,11 @@ chardet@^0.7.0:
+   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
+   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
+ 
++chmodr@1.2.0:
++  version "1.2.0"
++  resolved "https://registry.yarnpkg.com/chmodr/-/chmodr-1.2.0.tgz#720e96caa09b7f1cdbb01529b7d0ab6bc5e118b9"
++  integrity sha512-Y5uI7Iq/Az6HgJEL6pdw7THVd7jbVOTPwsmcPOBjQL8e3N+pz872kzK5QxYGEy21iRys+iHWV0UZQXDFJo1hyA==
++
+ cheerio-select@^1.3.0:
+   version "1.4.0"
+   resolved "https://registry.yarnpkg.com/cheerio-select/-/cheerio-select-1.4.0.tgz#3a16f21e37a2ef0f211d6d1aa4eff054bb22cdc9"
