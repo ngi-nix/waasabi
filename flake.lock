@@ -1,0 +1,60 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1631561581,
+        "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e5bf3925f6fbdfaf50a2a7ca0be2879c4261d19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1632209920,
+        "narHash": "sha256-NvSbdZooKiXRd1x4/qKPGiXEcD5wnAOfDa8SLd6ycVY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d6b683c0527a7f777b5f2b4db2555891cd5a85f5",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable-small",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "strapi-src": "strapi-src"
+      }
+    },
+    "strapi-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1629795641,
+        "narHash": "sha256-2s+QORp2Lp0lhvCNc/IdpuCGjd+4r1+GTXgY9tv1Vmw=",
+        "owner": "strapi",
+        "repo": "strapi",
+        "rev": "8972d78e8d1783ded6089d0318bfb62aff8e6962",
+        "type": "github"
+      },
+      "original": {
+        "owner": "strapi",
+        "ref": "v3.6.8",
+        "repo": "strapi",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
