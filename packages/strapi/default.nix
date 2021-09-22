@@ -8,7 +8,9 @@ yarn2nix-moretea.mkYarnWorkspace {
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-    patches = [ ./file.patch ];
+    patches = [
+      ./file.patch
+    ];
 
     unpackPhase = ''
       cp -r $src/* .
