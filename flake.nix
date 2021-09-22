@@ -27,6 +27,8 @@
       strapiWorkspace = final.callPackage ./packages/strapi { inherit strapi-src; };
     in
     {
+      esbuild-0_12_9 = final.callPackage ./packages/esbuild-0.12.9 { };
+
       inherit (strapiWorkspace) create-strapi-app;
       waasabi-backend = final.callPackage ./packages/waasabi-backend { inherit template-src; };
     };
