@@ -18,7 +18,7 @@
         in
         {
           packages = {
-            inherit (pkgs) create-strapi-app waasabi-backend;
+            inherit (pkgs) create-strapi-app waasabi-backend waasabi-backend-pin;
           };
         })
   // {
@@ -29,6 +29,7 @@
     {
       inherit (strapiWorkspace) create-strapi-app;
       waasabi-backend = final.callPackage ./packages/waasabi-backend { inherit template-src; };
+      waasabi-backend-pin = final.callPackage ./packages/waasabi-backend-pin { inherit template-src; };
     };
   };
 }
