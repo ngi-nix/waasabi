@@ -12,7 +12,10 @@
   inputs.template-src.url = "github:baytechc/strapi-template-waasabi";
   inputs.template-src.flake = false;
 
-  outputs = { self, nixpkgs, flake-utils, napalm, strapi-src, template-src }:
+  inputs.frontend-src.url = "github:baytechc/waasabi-live";
+  inputs.frontend-src.flake = false;
+
+  outputs = { self, nixpkgs, flake-utils, napalm, strapi-src, template-src, frontend-src }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -20,7 +23,7 @@
         in
         {
           packages = {
-            inherit (pkgs) create-strapi-app waasabi-backend;
+            inherit (pkgs) create-strapi-app waasabi-backend waasabi-live;
           };
         })
   // {
@@ -33,6 +36,7 @@
 
       inherit (strapiWorkspace) create-strapi-app;
       waasabi-backend = final.callPackage ./packages/waasabi-backend { inherit template-src; };
+      waasabi-live = final.callPackage ./packages/waasabi-live { inherit frontend-src; };
     };
   };
 }
