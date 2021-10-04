@@ -38,5 +38,14 @@
       waasabi-backend = final.callPackage ./packages/waasabi-backend { inherit template-src; };
       waasabi-live = final.callPackage ./packages/waasabi-live { inherit frontend-src; };
     };
+
+    nixosModule = { ... }:
+      {
+        imports = builtins.attrValues self.nixosModules;
+      };
+
+    nixosModules = {
+      waasabi-live = import ./modules/waasabi-live.nix;
+    };
   };
 }
