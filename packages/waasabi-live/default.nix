@@ -1,4 +1,25 @@
-{ napalm, writeTextFile, esbuild-0_12_9, frontend-src }:
+{
+  napalm,
+  writeTextFile,
+  esbuild-0_12_9,
+  frontend-src,
+
+  waasabiConfig ? {
+    prefix = "";
+    brand = "placeholder";
+    urlBackend = "http://localhost";
+    urlGraphQL = "wss://localhost/graphql";
+    urlSession = "";
+
+    chatEnabled = true;
+    chatSystem = "matrix";
+    chatInvites = false;
+    chatUrl = "https://matrix.to/";
+
+    matrixClient = "https://app.element.io/";
+    matrixApi = "https://matrix.org/_matrix/";
+  },
+}:
 
 napalm.buildPackage frontend-src {
   preBuild = ''
@@ -16,18 +37,18 @@ napalm.buildPackage frontend-src {
     name = "config.js";
     text = "
       export default {
-        PREFIX: '',
+        PREFIX: '${waasabiConfig.prefix}',
         BUILD_DIR: '_site/',
-        WAASABI_BRAND: 'placeholder',
-        WAASABI_BACKEND: 'http://localhost',
-        WAASABI_GRAPHQL_WS: 'wss://localhost/graphql',
-        WAASABI_SESSION_URL: ' ',
-        WAASABI_CHAT_ENABLED: true,
-        WAASABI_CHAT_SYSTEM: 'matrix',
-        WAASABI_CHAT_INVITES: false,
-        WAASABI_CHAT_URL: 'https://matrix.to/',
-        WAASABI_MATRIX_CLIENT: 'https://app.element.io/',
-        WAASABI_MATRIX_API: 'https://matrix.org/_matrix/',
+        WAASABI_BRAND: '${waasabiConfig.brand}',
+        WAASABI_BACKEND: '${waasabiConfig.urlBackend}',
+        WAASABI_GRAPHQL_WS: '${waasabiConfig.urlGraphQL}',
+        WAASABI_SESSION_URL: '${waasabiConfig.urlSession}',
+        WAASABI_CHAT_ENABLED: ${if waasabiConfig.chatEnabled then "true" else "false"},
+        WAASABI_CHAT_SYSTEM: '${waasabiConfig.chatSystem}',
+        WAASABI_CHAT_INVITES: ${if waasabiConfig.chatInvites then "true" else "false"},
+        WAASABI_CHAT_URL: '${waasabiConfig.chatUrl}',
+        WAASABI_MATRIX_CLIENT: '${waasabiConfig.matrixClient}',
+        WAASABI_MATRIX_API: '${waasabiConfig.matrixApi}',
       }
     ";
   };
