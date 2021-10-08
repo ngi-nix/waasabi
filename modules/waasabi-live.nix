@@ -2,6 +2,22 @@
 
 let
   cfg = config.services.waasabi-live;
+
+  waasabiLive = cfg.package.override { waasabiConfig = {
+    prefix = ""; # TODO: config
+    brand = "placeholder"; # TODO: config
+    urlBackend = cfg.backendUrl;
+    urlGraphQL = "wss://localhost/graphql"; # TODO: suboptimal
+    urlSession = "";
+
+    chatEnabled = true;
+    chatSystem = "matrix";
+    chatInvites = false;
+    chatUrl = "https://matrix.to/";
+
+    matrixClient = "https://app.element.io/";
+    matrixApi = "https://matrix.org/_matrix/";
+  };};
 in
 {
   options.services.waasabi-live = with lib; {
@@ -26,7 +42,7 @@ in
     services.nginx = {
       enable = true;
       virtualHosts.${cfg.url} = {
-        root = "${cfg.package}"; # TODO: configure package accordingly
+        root = "${waasabiLive}"; # TODO: configure package accordingly
         
         locations."/waasabi/" = {
           proxyPass = cfg.backendUrl;
