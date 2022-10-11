@@ -1,19 +1,22 @@
 {
   description = "waasabi flake";
 
-  inputs.nixpkgs.url = "nixpkgs/nixos-unstable-small";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.napalm.url = "github:nix-community/napalm";
-  inputs.napalm.inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    napalm.url = "github:nix-community/napalm";
+    napalm.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.strapi-src.url = "github:strapi/strapi/v3.6.8";
-  inputs.strapi-src.flake = false;
+    strapi-src.url = "github:strapi/strapi/v3.6.8";
+    strapi-src.flake = false;
 
-  inputs.template-src.url = "github:baytechc/strapi-template-waasabi";
-  inputs.template-src.flake = false;
+    template-src.url = "github:baytechc/strapi-template-waasabi";
+    template-src.flake = false;
 
-  inputs.frontend-src.url = "github:baytechc/waasabi-live";
-  inputs.frontend-src.flake = false;
+    frontend-src.url = "github:baytechc/waasabi-live";
+    frontend-src.flake = false;
+  };
+
 
   outputs = { self, nixpkgs, flake-utils, napalm, strapi-src, template-src, frontend-src }:
     flake-utils.lib.eachDefaultSystem
